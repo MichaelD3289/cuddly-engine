@@ -1,0 +1,29 @@
+name: Salesforce Deployment
+
+on:
+  workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Salesforce CLI
+        run: |
+          npm install --global @salesforce/cli
+          sf update
+
+      - name: Authenticate with Salesforce sandbox
+        run: sf org login jwt --client-id ${CLIENT_ID} --jwt-key-file $(cat $SANDBOX_KEY) --username ${SANDBOX_USERNAME} --alias sandbox-org --instance-url ${SANDBOX_INSTANCE_URL}
+        env:
+          SANDBOX_KEY: ${{ secrets.SANDBOX_KEY }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          SANDBOX_USERNAME: ${{ secrets.SANDBOX_USERNAME }}
+          SANDBOX_INSTANCE_URL: ${{ secrets.SANDBOX_INSTANCE_URL }}
+
+      - name: Deploy to Sandbox
+        run: sf project deploy start
+
