@@ -19,14 +19,13 @@ jobs:
       - name: Save Key to File
         run: |
           echo "${SANDBOX_KEY}" > sandbox.crt
-          echo "::set-output name=sandbox_key::sandbox.crt"
-        id: save-file
+          echo "{sandbox_key}={sandbox.crt}" >> $GITHUB_OUTPUT
         env:
           SANDBOX_KEY: ${{ secrets.SANDBOX_KEY }}
-
+      
       - name: Authenticate with Salesforce sandbox
         run: |
-          sf org login jwt --client-id ${CLIENT_ID} --jwt-key-file ${{ steps.save-file.outputs.sandbox_key }} --username ${SANDBOX_USERNAME} --alias sandbox-org --instance-url ${SANDBOX_INSTANCE_URL}
+          sf org login jwt --client-id ${CLIENT_ID} --jwt-key-file ${{ steps.save-file.outputs.sandbox_key }} --username ${SANDBOX_USERNAME} --alias sandbox-org --instance-url ${SANDBOX_INSTANCE_URL} 
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           SANDBOX_USERNAME: ${{ secrets.SANDBOX_USERNAME }}
