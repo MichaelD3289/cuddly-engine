@@ -1,7 +1,10 @@
-name: Salesforce Deployment
+name: Salesforce Sandbox Deployment
 
-on:
-  workflow_dispatch
+on: 
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -24,11 +27,11 @@ jobs:
         env:
           SANDBOX_KEY: ${{ secrets.SANDBOX_KEY }}
       
-      - name: Authenticate with Salesforce sandbox
+      - name: Authenticate with Salesforce Sandbox Org
         run: |
-          sf org login jwt --client-id ${CLIENT_ID} --jwt-key-file ${{ steps.save_key.outputs.sandbox_key }} --username ${SANDBOX_USERNAME} --alias sandbox-org --instance-url ${SANDBOX_INSTANCE_URL} 
+          sf org login jwt --client-id ${SANDBOX_CLIENT_ID} --jwt-key-file ${{ steps.save_key.outputs.sandbox_key }} --username ${SANDBOX_USERNAME} --alias sandbox-org --instance-url ${SANDBOX_INSTANCE_URL} 
         env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          SANDBOX_CLIENT_ID: ${{ secrets.SANDBOX_CLIENT_ID }}
           SANDBOX_USERNAME: ${{ secrets.SANDBOX_USERNAME }}
           SANDBOX_INSTANCE_URL: ${{ secrets.SANDBOX_INSTANCE_URL }}
 
