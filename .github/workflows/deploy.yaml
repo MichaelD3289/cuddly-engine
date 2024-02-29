@@ -19,7 +19,7 @@ jobs:
       - name: Save Key to File
         run: |
           echo "${SANDBOX_KEY}" > sandbox.crt
-          echo "{sandbox_key}={sandbox.crt}" >> $GITHUB_OUTPUT
+          echo "sandbox_key=sandbox.crt" >> $GITHUB_OUTPUT
         id: save_key
         env:
           SANDBOX_KEY: ${{ secrets.SANDBOX_KEY }}
