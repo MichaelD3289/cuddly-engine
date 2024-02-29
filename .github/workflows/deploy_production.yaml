@@ -10,7 +10,8 @@ jobs:
   deploy-production:
     uses: ./.github/workflows/deploy_base.yaml
     with:
-      instance_url: ${{ secrets.PRODUCTION_INSTANCE_URL }}
-      username: ${{ secrets.PRODUCTION_USERNAME }}
-      rsa_private_key: ${{ secrets.PRODUCTION_KEY }}
-      client_id: ${{ secrets.PRODUCTION_CLIENT_ID }}
+      instanceUrl: ${{ vars.PRODUCTION_INSTANCE_URL }}
+      username: ${{ vars.PRODUCTION_USERNAME }}
+    secrets:
+      rsaPrivateKey: ${{ secrets.PRODUCTION_KEY }}
+      clientId: ${{ secrets.PRODUCTION_CLIENT_ID }}

@@ -3,25 +3,24 @@ name: Salesforce Deployment
 permissions: write-all
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      instance_url:
+      instanceUrl:
         required: true
         type: string
       username:
         required: true
         type: string
-      rsa_private_key:
+    secrets:
+      rsaPrivateKey:
         required: true
-        type: string
-      client_id:
+      clientId:
         required: true
-        type: string
 
 env:
-  RSA_PRIVATE_KEY: ${{ inputs.RSA_PRIVATE_KEY }}
-  CLIENT_ID: ${{ inputs.CLIENT_ID }}
-  INSTANCE_URL: ${{ inputs.instance_url }}
+  RSA_PRIVATE_KEY: ${{ secrets.rsaPrivateKey }}
+  CLIENT_ID: ${{ secrets.clientId }}
+  INSTANCE_URL: ${{ inputs.instanceUrl }}
   USERNAME: ${{ inputs.username }}
 
 jobs:
@@ -46,8 +45,8 @@ jobs:
 
       - name: Save Key to File
         run: |
-          echo "$RSA_PRIVATE_KEY" > private_key.crt
-          echo "rsa_key=private_key.crt" >> $GITHUB_OUTPUT
+          echo "$RSA_PRIVATE_KEY" > private_rsa.key
+          echo "rsa_key=private_rsa.key" >> $GITHUB_OUTPUT
         id: save_key
       
       - name: Authenticate with Salesforce Org
