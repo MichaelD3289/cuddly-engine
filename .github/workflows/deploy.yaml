@@ -33,5 +33,5 @@ jobs:
           SANDBOX_INSTANCE_URL: ${{ secrets.SANDBOX_INSTANCE_URL }}
 
       - name: Deploy to Sandbox
-        run: sf project deploy start
+        run: sf project deploy start -o sandbox-org
 
