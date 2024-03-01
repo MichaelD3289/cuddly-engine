@@ -1,7 +1,5 @@
 name: Salesforce Deployment
 
-permissions: write-all
-
 on:
   workflow_call:
     inputs:
