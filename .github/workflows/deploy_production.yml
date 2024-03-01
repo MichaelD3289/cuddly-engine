@@ -1,0 +1,17 @@
+name: Salesforce Production Deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-production:
+    uses: ./.github/workflows/deploy_base.yml
+    with:
+      instanceUrl: ${{ vars.PRODUCTION_INSTANCE_URL }}
+      username: ${{ vars.PRODUCTION_USERNAME }}
+    secrets:
+      rsaPrivateKey: ${{ secrets.PRODUCTION_KEY }}
+      clientId: ${{ secrets.PRODUCTION_CLIENT_ID }}

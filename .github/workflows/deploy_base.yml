@@ -1,0 +1,55 @@
+name: Salesforce Deployment
+
+on:
+  workflow_call:
+    inputs:
+      instanceUrl:
+        required: true
+        type: string
+      username:
+        required: true
+        type: string
+    secrets:
+      rsaPrivateKey:
+        required: true
+      clientId:
+        required: true
+
+env:
+  RSA_PRIVATE_KEY: ${{ secrets.rsaPrivateKey }}
+  CLIENT_ID: ${{ secrets.clientId }}
+  INSTANCE_URL: ${{ inputs.instanceUrl }}
+  USERNAME: ${{ inputs.username }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Print Inputs
+        run: |
+          echo "Instance Url: $INSTANCE_URL"
+          echo "Username: $USERNAME"
+
+      - name: Install Salesforce CLI
+        run: |
+          npm install --global @salesforce/cli
+          sf update
+
+      - name: Save Key to File
+        run: |
+          echo "$RSA_PRIVATE_KEY" > private_rsa.key
+          echo "rsa_key=private_rsa.key" >> $GITHUB_OUTPUT
+        id: save_key
+      
+      - name: Authenticate with Salesforce Org
+        env:
+          RSA_KEY_FILE_NAME: ${{ steps.save_key.outputs.rsa_key }}
+        run: |
+          sf org login jwt --client-id "$CLIENT_ID" --jwt-key-file "$RSA_KEY_FILE_NAME" --username "$USERNAME" --alias deployment-org --instance-url "$INSTANCE_URL"
+
+      - name: Deploy to Org
+        run: sf project deploy start -o deployment-org

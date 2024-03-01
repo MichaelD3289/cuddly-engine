@@ -1,0 +1,22 @@
+name: Salesforce Sandbox Deployment
+
+on: 
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-sandbox:
+    uses: ./.github/workflows/deploy_base.yml
+    with:
+      instanceUrl: ${{ vars.SANDBOX_INSTANCE_URL }}
+      username: ${{ vars.SANDBOX_USERNAME }}
+    secrets:
+      rsaPrivateKey: ${{ secrets.SANDBOX_KEY }}
+      clientId: ${{ secrets.SANDBOX_CLIENT_ID }}
+      
+
+    
+ 
+
