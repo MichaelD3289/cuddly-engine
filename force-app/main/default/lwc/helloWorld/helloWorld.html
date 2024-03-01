@@ -1,10 +1,18 @@
 <template>
   <lightning-card title="HelloWorld" icon-name="custom:custom14">
     <div class="slds-m-around_medium">
-      <p>Hello, {greeting}!</p>
-      <p>We are so excited to see you here!</p>
-      <p>This is a really cool new custom lightning component!</p>
-      <lightning-input label="Name" value={greeting} onchange={changeHandler}></lightning-input>
+      <p>Hello, there!</p>
+      <p>Please type in a pokemon below and hit "Retrieve" to get more detailed info on that pokemon.</p>
+      <lightning-input label="Pokemon" value={chosenPokemon} onchange={changeHandler}></lightning-input>
+      <lightning-button label="Get Pokemon" onclick={getPokemonHandler}>Retrieve</lightning-button>
+
+      <template lwc:if={pokemonDetails}>
+        <pre>{pokemonDetails}</pre>
+      </template>
+      <template lwc:else>
+        <p>Please hit "Retrieve to view the details here"</p>
+      </template>
+      
     </div>
   </lightning-card>
 </template>
